@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html><head><title>마우스 이벤트 객체의 프로퍼티</title>
+	<meta charset="utf-8">
+<style>
+div {
+	background : skyblue;
+	width : 250px;
+}
+</style>
+</head>
+<body>
+<h3>마우스 이벤트 객체의 프로퍼티와 onmousemove</h3>
+<hr>
+이미지 위에 마우스를 움직일 때 
+onmousemove 리스너가 실행되고,  
+마우스의 위치를 보여줍니다.<p>
+<p>마우스 오른쪽 클릭은 금지됩니다. 아무곳이나
+클릭해도 컨텍스트 메뉴를 볼 수 없습니다.
+</p>
+<img src="beach.webp" width="300" 
+		onmousemove="where(event)"><p>
+<div id="div"></div>
+<script>
+var div = document.getElementById("div");
+function where(e) {
+	var text = "버튼=" + e.button + "<br>";
+	text += "(screenX, screenY)=" + 
+			e.screenX + "," + e.screenY + "<br>";
+	text += "(clientX, clientY)=" + 
+			e.clientX + "," + e.clientY + "<br>";
+	text += "(offsetX, offsetY)=" + 
+			e.offsetX + "," + e.offsetY + "<br>";
+	text += "(x, y)=" + e.x + "," + e.y + "\n";
+	div.innerHTML = text;
+}
+
+function hideMenu() {
+	alert("오른쪽 클릭<컨텍스트 메뉴>금지");
+	return false;
+}
+document.oncontextmenu=hideMenu;
+
+</script>
+</body>
+</html>
+

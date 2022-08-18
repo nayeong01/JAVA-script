@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>write()와 writeln() 활용</title>
+<meta charset="utf-8">
+</head>
+<body>
+<h3>write()와 writeln() 활용</h3>
+<hr>
+<script>
+	document.write("<h3>동물원에 소풍갑시다</h3>");
+	document.write("<p style='color:blue'>날씨가 좋아 ");
+	document.write("소풍갑니다</p>");
+	document.write(2+3);
+	document.write("명입니다.<br>"); // 다음 줄로 넘어가기
+
+	document.writeln(5); // 다음 줄에 넘어가지 못함
+	document.writeln("명입니다.<br>");
+
+    var newDIV = document.createElement("div");
+    newDIV.innerHTML = "새로 생성된 DIV입니다."; 
+    newDIV.setAttribute("id", "myDiv");
+    newDIV.style.backgroundColor = "yellow";
+
+</script>
+
+<div id="myDiv"
+       style="background-color:yellow">
+       새로 생성된 DIV입니다.
+</div>
+
+</body>
+</html>

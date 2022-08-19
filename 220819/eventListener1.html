@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>박스 모델</title>
+    <meta charset="utf-8">
+</head>
+
+<body>
+<h3>박스 모델</h3>
+<p>배경 색 바꾸기</p> 
+<hr>
+
+<div>red</div>
+<div>green</div>
+<div>yellow</div>
+<div>blue</div>
+<div>white</div>
+<div>pink</div>
+
+<script>
+    let divs = document.querySelectorAll("div");
+    divs.forEach((el) => {
+        el.addEventListener("click",() => {
+            document.body.style.backgroundColor=el.textContent;
+    });
+    });
+</script>
+
+</body>
+</html>

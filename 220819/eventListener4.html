@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+    <title>JS Tester</title>
+</head>
+<body> 
+    <div class="output1">
+    </div>
+    <input type="text" placeholder="First Name" name="first"><br>
+    <input type="text" placeholder="Last Name" name="last"><br>
+
+    <script>
+        
+        let first = document.querySelector("first");
+        let last = document.querySelector("last");
+        first.addEventListener("textContent",(e)=>{
+            message(textContent, e);
+        });
+        last.addEventListener("textContent",(e)=>{
+            message(textContent, e);
+        });
+
+        function message(val, event){
+            console.log(val);
+        }
+    </script>
+</body>
+</html>

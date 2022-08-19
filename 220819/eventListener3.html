@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>이벤트 리스너</title>
+        <meta charset="utf-8">
+       
+    </head>
+    <body>
+        <h1>마우스 이벤트 활용하기</h1>
+        <div class = "name">
+        </div>
+    </body>
+    <script>
+       
+        let out = document.querySelector(".name");
+        out.textContent = "say hello world";
+        out.style.height = "200px";
+        out.style.width = "200px";
+        out.style.backgroundColor = "purple";
+
+        out.addEventListener("mousedown", (e1) =>{
+            message("green", e1);
+        })
+
+        out.addEventListener("mouseover", (e1) =>{
+            message("red", e1);
+        })
+
+        out.addEventListener("mouseout", (e1) =>{
+            message("yellow", e1);
+        })
+
+        out.addEventListener("mouseup", (e1) =>{
+            message("blue", e1);
+        })
+
+        function message(val, event){
+            out.style.backgroundColor = val;
+            console.log(val);
+            console.log(event);
+        }
+        
+    </script>
+</html>

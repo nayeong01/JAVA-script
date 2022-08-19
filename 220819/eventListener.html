@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>박스 모델</title>
+    <meta charset="utf-8">
+
+<script>
+    let bool = false;
+    window.onclick = function(){
+        console.log("흑백모드 전환");
+       // bool = !bool;
+
+        if (!bool) {
+            var back = document.body;
+            document.body.style.backgroundColor="black";
+            document.body.style.color ="white";
+            bool = true;
+        } else {
+            document.body.style.backgroundColor = "white";
+            document.body.style.color = "black";
+            bool = false;
+        }
+}
+</script>
+</head>
+
+<body>
+<h3>박스 모델</h3>
+<p>다크모드로 변경하기. 아무 곳이나 클릭해보세요.</p> 
+<hr>
+<div style="text-align: center;">
+	<img src="media/logo.png" alt="로고">
+</div>
+</body>
+</html>
+

@@ -6,22 +6,37 @@
 <body> 
     <div class="output1">
     </div>
+
     <input type="text" placeholder="First Name" name="first"><br>
     <input type="text" placeholder="Last Name" name="last"><br>
 
     <script>
+        const output = document.querySelector(".output1");
         
-        let first = document.querySelector("first");
-        let last = document.querySelector("last");
-        first.addEventListener("textContent",(e)=>{
-            message(textContent, e);
+        let in1 = document.querySelector("input[name='first']");
+        let in2 = document.querySelector("input[name='last']");
+        in1.addEventListener("change",(e)=>{
+            console.log("change");
+            updater(in1.value);
         });
-        last.addEventListener("textContent",(e)=>{
-            message(textContent, e);
+        in1.addEventListener("blur",(e)=>{
+            console.log("blur");
         });
-
-        function message(val, event){
-            console.log(val);
+        in1.addEventListener("focus",(e)=>{
+            console.log("focus");
+        });
+        in2.addEventListener("change",(e)=>{
+            console.log("change");
+            updater(in2.value);
+        });
+        in2.addEventListener("blur",(e)=>{
+            console.log("blur");
+        });
+        in2.addEventListener("focus",(e)=>{
+            console.log("focus");
+        });
+        function updater(val){
+            output.textContent=val;
         }
     </script>
 </body>

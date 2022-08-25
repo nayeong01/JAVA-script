@@ -114,7 +114,7 @@ function doRegisterRestaurant() {
 }
 
 function doUnregisterRestaurnat(){
-    doUpdateRestaurant("Unregister ");
+    doUnregisterRestaurant("Unregister ");
 }
 
 function findStartsWithDataPos(name, startPos){
@@ -152,7 +152,7 @@ function doSearchRestaurants(){
 }
 
 function doModifyRestaurant(){
-    doUpdateRestaurant();
+    domodifyRestaurant("Modify ");
 }
 
 function doSaveAdd() {
@@ -246,21 +246,61 @@ function doCancelUpdate() { // 이건 메뉴로 돌아가는 함수
 
 function doUpdateRestaurant(Name) { // 수정에 쓰이는건가?
     openPage(`${Name} Restaurant`);
-    Restaurant.buildElementsFromSchema(mainPage,
-        [{ id: "findName", prompt: "Name", type: "input" },
+    dataSchema = [{ id: "name", prompt: "Name", type: "input" },
         { id: "cuisineType", prompt: "Cuisine Type", type: "input" },
         { id: "description", prompt: "Description", type: "textarea", rows: 5, cols: 40 }
-        ]);
+        ]
+    Restaurant.buildElementsFromSchema(mainPage,dataSchema);
 
     showMenu(
-        [{ desc: "Find Restaurant", label: "Find", func: "doFindRestaurant()" },
+        [{ desc: `Find Restaurant`, label: `Find`, func: "doFindRestaurant()" },
         { desc: "Cancel updates", label: "Cancel", func: "doCancelUpdate()" }]);
+}
+
+function doUnregisterRestaurant(Name) {
+    openPage(`${Name} Restaurant`);
+
+    dataSchema = [{ id: "name", prompt: "Name", type: "input" }]
+
+    Restaurant.buildElementsFromSchema(mainPage,dataSchema);
+
+    showMenu(
+        [{ desc: `Unregister Restaurant`, label: `Unresgister`, func: "UnregisterRestaurant()" },
+        { desc: "Cancel updates", label: "Cancel", func: "doCancelUpdate()" }]);
+}
+
+function domodifyRestaurant(Name) {
+    openPage(`${Name} Restaurant`);
+
+    dataSchema = [{ id: "name", prompt: "Name", type: "input" }]
+
+    Restaurant.buildElementsFromSchema(mainPage,dataSchema);
+
+    showMenu(
+        [{ desc: `Modify Restaurant`, label: `Modify`, func: "ModifyRestaurant()" },
+        { desc: "Cancel updates", label: "Cancel", func: "doCancelUpdate()" }]);
+}
+
+function ModifyRestaurant() {
+
+    var searchRefElement = document.getElementById("name");
+    var searchRef = searchRefElement.value;
+
+    var pos = findStartsWithDataPos(searchRef, 0);
+
+    if(isNaN(pos)){
+        alert("Restaurant " + searchRef + " not found");
+    } else {
+        doUpdateItem(pos+1);
+    }
+
+
 }
 
 function doFindRestaurant() { // 위에 find 버튼 누르면 실행된다. 
                               // value가 없으면 찾을 수 없다는 경고문
                               // 그럼 있을 경우엔?
-    var searchRefElement = document.getElementById("findName");
+    var searchRefElement = document.getElementById("name");
     var searchRef = searchRefElement.value;
 
     var pos = findStartsWithDataPos(searchRef, 0);
@@ -272,11 +312,26 @@ function doFindRestaurant() { // 위에 find 버튼 누르면 실행된다.
     }
 }
 
+function UnregisterRestaurant(){
+
+    var searchRefElement = document.getElementById("name");
+    var searchRef = searchRefElement.value;
+
+    var pos = findStartsWithDataPos(searchRef, 0);
+
+    if(isNaN(pos)){
+        alert("Restaurant " + searchRef + " not found");
+    } else {
+        dataStore.splice(pos, 1);
+        alert(searchRef+ "is unregister!");
+    }
+}
+
 function displayData(pos) {
 
     var data = dataStore[pos];
 
-    for (item of dataStore) {
+    for (item of dataSchema) {
         displayElement(item.id, data[item.id]);
     }
 }

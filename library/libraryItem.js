@@ -121,9 +121,23 @@ class libraryItem {
 
     sendToHTML() {
         // work through each of the restaurants in the object
+        let contList = [];
         for (let item in this) {
-            if ( item == "rstrntRef" || item == "numberServed") {
+            if ( item == "itemRef" || item == "type") {
                 // don't add the type or rstrntkref to the HTML
+                continue;
+            } if (item =="contributor"){
+
+                let itemElement = document.getElementById(item);
+
+                var contArr = itemElement.value.split(',');
+
+                for(let i=0; i<contArr.length; i++){
+                    let cotrbt = new ContributorWithType(contArr[i],"type");
+                    contList.push(cotrbt);
+
+                }
+                contList=this[item];
                 continue;
             }
             // get the element to send to
@@ -152,14 +166,15 @@ class libraryItem {
                     contList.push(cotrbt);
 
                 }
-
                 this[item] = contList;
+                console.log(contList);
+                continue;
             }
             // get the element to load from
             let itemElement = document.getElementById(item);
             // set the element to the value in this object
             this[item] = itemElement.value;
-            console.log(contList);
+            console.log(itemElement.value);
         }
     }
 

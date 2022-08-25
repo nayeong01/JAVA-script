@@ -182,13 +182,17 @@ function addBook(RstrntClass) {
     
     openPage("Register Book " );
 
+    activeItem.getHTML(mainPage);
+/*
     var dataSchema=[{ id: "title", prompt: "Title", type: "input"},
     { id: "subject", prompt: "Subject", type: "input" },
     { id: "contributor", prompt: "Contributor", type: "input"},
         { id: "ISBN", prompt: "ISBN", type: "input" },
     { id: "DDSnumber", prompt: "DDSnumber", type: "input" }];
-
-    Book.buildElementsFromSchema(mainPage, dataSchema);
+*/
+    Book.buildElementsFromSchema(mainPage, 
+        [{ id: "ISBN", prompt: "ISBN", type: "input" },
+        { id: "DDSnumber", prompt: "DDSnumber", type: "input" }]);
     
     showMenu(
         [{ desc: "Save Item", label: "Save", func: "doSaveAdd()" },
@@ -256,43 +260,82 @@ function doSaveAdd() {
 }
 
 // title 검색
+
 function doSearchtitle(){
-
-    doUpdateRestaurant("Title ")
-
-}
-
-function doUpdateRestaurant(Name) {
-
-    openPage(`Search ${Name} `);
-
-    dataSchema = [{ id: "title", prompt: "title", type: "input" },
-        { id: "subject", prompt: "subject", type: "input" },
-        { id: "DDSnumber", prompt: "DDsnumber", type: "input"}
-    ]
-    libraryItem.buildElementsFromSchema(mainPage,dataSchema);
-
-    showMenu(
-        [{ desc: `Find Restaurant`, label: `Find`, func: "Searchtitle()" },
-        { desc: "Cancel updates", label: "Cancel", func: "doShowMainMenu()" }]);
-
+    finditem("title ");
 }
 
 function Searchtitle() {  
 
-var searchRefElement = document.getElementById("title");
-var searchName = searchRefElement.value;
-
-var pos = findStartsWithDataPos(searchName, 0);
-
-if (isNaN(pos)) {
-    alert("Item " + searchRef + " not found");
-} else {
-    displayData(pos);
+    var searchRefElement = document.getElementById("title");
+    var searchName = searchRefElement.value;
+    
+    var pos = findStartsWithDataPos(searchName, 0, "title");
+    
+    if (isNaN(pos)) {
+        alert("Item " + searchRef + " not found");
+    } else {
+        displayData(pos);
+    }
 }
+
+// subject 검색
+
+function doSearchsubject(){
+    finditem("subject ");
 }
 
-function findStartsWithDataPos(name, startPos){
+function Searchsubject() {  
+
+    var searchRefElement = document.getElementById("subject");
+    var searchsub = searchRefElement.value;
+    
+    var pos = findStartsWithDataPos(searchsub, 0,"subject");
+    
+    if (isNaN(pos)) {
+        alert("Item " + searchsub + " not found");
+    } else {
+        displayData(pos);
+    }
+    }
+
+//contributor 검색
+
+function doSearchContributor(){
+    finditem("contributor ");
+}
+
+function Searchcontributor() {  
+
+    var searchRefElement = document.getElementById("contributor");
+    var searchsub = searchRefElement.value;
+    
+    var pos = findStartsWithDataPos(searchsub, 0,"contributor");
+    
+    if (isNaN(pos)) {
+        alert("Item " + searchsub + " not found");
+    } else {
+        displayData(pos);
+    }
+}
+
+function finditem(Name) {
+
+    openPage(`Search by ${Name} `);
+
+    dataSchema = [{ id: "title", prompt: "title", type: "input" },
+        { id: "subject", prompt: "subject", type: "input" },
+        { id: "contributor", prompt: "contributor", type: "input"}]
+
+    libraryItem.buildElementsFromSchema(mainPage,dataSchema);
+
+    showMenu(
+        [{ desc: `Find Restaurant`, label: `Find`, func: `Search${Name}()` },
+        { desc: "Cancel updates", label: "Cancel", func: "doShowMainMenu()" }]);
+
+}
+
+function findStartsWithDataPos(name, startPos, type){
     
     name = name.toLowerCase();
 
@@ -301,7 +344,7 @@ function findStartsWithDataPos(name, startPos){
     do {
         // repeat this code while the test
         // at the end of the loop is true
-
+        if (type == "title"){
         let storedName = dataStore[pos].title;
         var lowerCaseStoredName = storedName.toLowerCase();
         if (lowerCaseStoredName.startsWith(name)) {
@@ -315,7 +358,41 @@ function findStartsWithDataPos(name, startPos){
         if (pos == dataStore.length) {
             pos = 0;
         }
+    }
+        if (type =="subject") {
+            let storedName = dataStore[pos].subject;
+            var lowerCaseStoredName = storedName.toLowerCase();
+            if (lowerCaseStoredName.startsWith(name)) {
+                return pos;
+            }
+    
+            // move down the data
+            pos = pos + 1;
+    
+            // if we have reached the end of the data - wrap round
+            if (pos == dataStore.length) {
+                pos = 0;
+            }
+        }
 
+        if (type =="contributor") {
+            var data = dataStore[pos].contributor;
+            console.log(data);
+                for(cotb of data){
+                    var lowerCaseStoredName =cotb.name.name.toLowerCase();
+                    if (lowerCaseStoredName.startsWith(name)) {
+                        return pos;
+                    }
+                        
+                    // move down the data
+                    pos = pos + 1;
+
+                    // if we have reached the end of the data - wrap round
+                    if (pos == dataStore.length) {
+                    pos = 0;
+                    }
+                }
+        }
         // stop when we get back to where we started
     } while (pos != startPos)
 
@@ -332,9 +409,163 @@ function displayData(pos) {
 }
 
 function displayElement(id, text) {
-
     var element = document.getElementById(id);
-
     element.value = text;
+    var list = [];
+    if (id == "contributor"){
+        for(cot of text){
+            var ctrb = cot.name.name;
+            list.push(ctrb);
+            element.value = list;
+        }
+    }
+}
 
+
+// 목록 삭제하기
+
+function doUnRegisteritem(){
+    doUnregister("Unregister ");
+}
+
+function doUnregister(Name) {
+    openPage(`${Name} Item`);
+
+    dataSchema = [{ id: "name", prompt: "Name", type: "input" }]
+
+    libraryItem.buildElementsFromSchema(mainPage,dataSchema);
+
+    showMenu(
+        [{ desc: `Unregister Restaurant`, label: `Unresgister`, func: "Unregisteritem()" },
+        { desc: "Cancel updates", label: "Cancel", func: "doShowMainMenu()" }]);
+}
+
+function Unregisteritem(){
+
+    var searchRefElement = document.getElementById("name");
+    var searchRef = searchRefElement.value;
+
+    var pos = findStartsWithDataPos(searchRef, 0, "title");
+
+    if(isNaN(pos)){
+        alert("Restaurant " + searchRef + " not found");
+    } else {
+        dataStore.splice(pos, 1);
+        alert(searchRef+ " is unregister!");
+    }
+}
+
+
+//아이템 수정하기
+
+function doModifyitem(){
+    domodify("Modify ");
+}
+
+function domodify(Name) {
+    openPage(`${Name} Restaurant`);
+
+    dataSchema = [{ id: "name", prompt: "Name", type: "input" }]
+
+    libraryItem.buildElementsFromSchema(mainPage,dataSchema);
+
+    showMenu(
+        [{ desc: `Modify Restaurant`, label: `Modify`, func: "Modifyitem()" },
+        { desc: "Cancel updates", label: "Cancel", func: "doShowMainMenu()" }]);
+}
+
+function Modifyitem() {
+
+    var searchRefElement = document.getElementById("name");
+    var searchRef = searchRefElement.value;
+
+    var pos = findStartsWithDataPos(searchRef, 0, "title");
+
+    if(isNaN(pos)){
+        alert("Restaurant " + searchRef + " not found");
+    } else {
+        doUpdateItem(pos+1);
+    }
+
+}
+
+function dofinditem(Ref) {
+
+    for (let item of dataStore) {
+        if (item.itemRef == Ref) {
+            return item;
+        }
+    }
+    return null;
+}
+
+function doUpdateItem(Ref) {
+
+    var rstrnt = dofinditem(Ref);
+
+    if (rstrnt == null) {
+        return false;
+    }
+
+    activeItem = rstrnt;
+
+    openPage("Update "  + Ref);
+
+    if(rstrnt.type == "book"){
+
+        dataSchema = [{ id: "title", prompt: "title", type: "input" },
+        { id: "subject", prompt: "subject", type: "input" },
+        { id: "contributor", prompt: "contributor", type: "input"},
+        { id: "ISBN", prompt: "ISBN", type: "input" },
+        { id: "DDSnumber", prompt: "DDSnumber", type: "input" }]
+
+        Book.buildElementsFromSchema(mainPage, dataSchema);
+
+        displayData(Ref-1);
+    } if (rstrnt.type == "CD"){
+
+        dataSchema = [{ id: "title", prompt: "title", type: "input" },
+        { id: "subject", prompt: "subject", type: "input" },
+        { id: "contributor", prompt: "contributor", type: "input"},
+        { id: "UPC", prompt: "UPC", type: "input" }]
+
+        Book.buildElementsFromSchema(mainPage, dataSchema);
+
+        displayData(Ref-1);
+    } if(rstrnt.type == "DVD"){
+
+        dataSchema = [{ id: "title", prompt: "title", type: "input" },
+        { id: "subject", prompt: "subject", type: "input" },
+        { id: "contributor", prompt: "contributor", type: "input"},
+        { id: "genre", prompt: "genre", type: "input" }]
+
+        Book.buildElementsFromSchema(mainPage, dataSchema);
+
+        displayData(Ref-1);
+
+    } if(rstrnt.type == "Magazine"){
+
+        dataSchema = [{ id: "title", prompt: "title", type: "input" },
+        { id: "subject", prompt: "subject", type: "input" },
+        { id: "contributor", prompt: "contributor", type: "input"},
+        { id: "volume", prompt: "volume", type: "input" },
+        {id: "issue", prompt:"issue", type:"input"}]
+
+        Book.buildElementsFromSchema(mainPage, dataSchema);
+
+        displayData(Ref-1);
+    }
+
+    showMenu(
+        [{ desc: "Save updates", label: "Save", func: "doSaveUpdate()" },
+        { desc: "Cancel updates", label: "Cancel", func: "doShowMainMenu()" }]);
+
+    return true;
+}
+
+function doSaveUpdate() { // 수정하고 나서 부르면 되겠다
+    activeItem.loadFromHTML();
+    alert(activeItem.name +" is updated");
+    saveDataStore();
+    doShowMainMenu();
 }

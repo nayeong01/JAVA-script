@@ -88,13 +88,13 @@ function doShowMainMenu() {
     openPage("Main Menu");
 
     showMenu(
-        [{ desc: "Show Library item", label: "Show", func: "doShowLibrary()" },
-        { desc: "Search by title", label: "Title", func: "doSearchtitle()" },
-        { desc: "Search by subject", label: "Subject", func: "doSearchsubject()" },
-        { desc: "Search by contributor", label: "Contributor", func: "doSearchContributor()" },
-        { desc: "Register library item", label: "Register", func: "doRegisteritem()" },
-        { desc: "Unregister library item", label: "Unregister", func: "doUnRegisteritem()" },
-        { desc: "Modify library item", label: "Modify", func: "doModifyitem()" },]);
+        [{ desc: "💧Show Library item", label: "Show", func: "doShowLibrary()" },
+        { desc: "💧Search by title", label: "Title", func: "doSearchtitle()" },
+        { desc: "💧Search by subject", label: "Subject", func: "doSearchsubject()" },
+        { desc: "💧Search by contributor", label: "Contributor", func: "doSearchContributor()" },
+        { desc: "💧Register library item", label: "Register", func: "doRegisteritem()" },
+        { desc: "💧Unregister library item", label: "Unregister", func: "doUnRegisteritem()" },
+        { desc: "💧Modify library item", label: "Modify", func: "doModifyitem()" },]);
 }
 
 function doStartLibrary(mainPageId, storeNameToUse) {
@@ -122,16 +122,78 @@ function doStartLibrary(mainPageId, storeNameToUse) {
 
 // 등록 아이템 보여주기
 
-function createList(heading, items) {
+function BookList(heading, items) {
+    
     openPage(heading);
+
     for (let item of items) {
-        let itemPar = createListElement(item);
-        mainPage.appendChild(itemPar);
+        if (item.type == "Author") {
+            let itemPar = createListElement(item);
+            mainPage.appendChild(itemPar);
+        }
     }
+
+    showMenu(
+        [{ desc: "Cancel", label: "Cancel", func: "doShowMainMenu()" }]);
+
 }
 
+function CDList(heading, items) {
+    
+    openPage(heading);
+
+    for (let item of items) {
+             if (item.type == "Artist"){
+            let itemPar = createListElement(item);
+            mainPage.appendChild(itemPar);
+        }
+    }
+
+    showMenu(
+        [{ desc: "Cancel", label: "Cancel", func: "doShowMainMenu()" }]);
+
+}
+
+function DVDList(heading, items) {
+    
+    openPage(heading);
+
+    for (let item of items) {
+         if (item.type == "Director or Actor"){
+            let itemPar = createListElement(item);
+            mainPage.appendChild(itemPar);
+        }
+    }
+    showMenu(
+        [{ desc: "Cancel", label: "Cancel", func: "doShowMainMenu()" }]);
+
+}
+
+function MagazineList(heading, items) {
+    
+    openPage(heading);
+
+    for (let item of items) {
+         if (item.type == "Editor"){
+            let itemPar = createListElement(item);
+            mainPage.appendChild(itemPar);
+        }
+    }
+    showMenu(
+        [{ desc: "Cancel", label: "Cancel", func: "doShowMainMenu()" }]);
+
+}
 function doShowLibrary() {
-    createList("Item List", dataStore);
+    
+    openPage("Item List");
+
+    showMenu(
+        [{desc: "book", label:"Book", func:"BookList('Book List',dataStore)"},
+        {desc: "CD", label:"CD", func:"CDList('CD List',dataStore)"},
+        {desc: "DVD", label:"DVD", func:"DVDList('DVD List',dataStore)"},
+        {desc: "magazine", label:"Magazine", func:"MagazineList('Magazine List',dataStore)"}])
+    
+    //createList("Item List", dataStore);
 
     showMenu(
         [{ desc: "Cancel", label: "Cancel", func: "doShowMainMenu()" }]);
@@ -144,7 +206,7 @@ function createListElement(item) {
     let openButton = document.createElement("button");
     openButton.innerText = "Update";
     openButton.className = "itemButton";
-    let editFunctionCall = "doUpdateItem('" + item.ItemRef + "')";
+    let editFunctionCall = "doUpdateItem('" + item.title + "')";
     openButton.setAttribute("onclick", editFunctionCall);
     resultPar.appendChild(openButton);
 
@@ -183,13 +245,7 @@ function addBook(RstrntClass) {
     openPage("Register Book " );
 
     activeItem.getHTML(mainPage);
-/*
-    var dataSchema=[{ id: "title", prompt: "Title", type: "input"},
-    { id: "subject", prompt: "Subject", type: "input" },
-    { id: "contributor", prompt: "Contributor", type: "input"},
-        { id: "ISBN", prompt: "ISBN", type: "input" },
-    { id: "DDSnumber", prompt: "DDSnumber", type: "input" }];
-*/
+
     Book.buildElementsFromSchema(mainPage, 
         [{ id: "ISBN", prompt: "ISBN", type: "input" },
         { id: "DDSnumber", prompt: "DDSnumber", type: "input" }]);
@@ -262,61 +318,131 @@ function doSaveAdd() {
 // title 검색
 
 function doSearchtitle(){
-    finditem("title ");
+    findTitle("title ");
 }
 
+function findTitle(Name) {
+
+    openPage(`Search by ${Name} `);
+
+    dataSchema = [{ id: "title", prompt: "title", type: "input" }]
+
+    libraryItem.buildElementsFromSchema(mainPage,dataSchema);
+
+    showMenu(
+        [{ desc: `Find Restaurant`, label: `Find`, func: `Search${Name}()` },
+        { desc: "Cancel updates", label: "Cancel", func: "doShowMainMenu()" }]);
+
+}
+function createTitleList(heading, items, sub){
+    openPage(heading);
+
+    for(item of items) {
+        if(item.title == sub){
+            let itemPar = createListElement(item);
+            mainPage.appendChild(itemPar);
+        }
+    }
+}
 function Searchtitle() {  
 
     var searchRefElement = document.getElementById("title");
-    var searchName = searchRefElement.value;
-    
-    var pos = findStartsWithDataPos(searchName, 0, "title");
-    
-    if (isNaN(pos)) {
-        alert("Item " + searchRef + " not found");
-    } else {
-        displayData(pos);
-    }
+    var searchsub = searchRefElement.value;  
+
+    createTitleList("Search by title", dataStore, searchsub);
+
+    showMenu([{ desc: "Cancel", label: "Cancel", func: "doShowMainMenu()" }]);
 }
 
 // subject 검색
 
 function doSearchsubject(){
-    finditem("subject ");
+    findSubject("subject ");
 }
+
+function findSubject(Name) {
+
+    openPage(`Search by ${Name} `);
+
+    dataSchema = [{ id: "subject", prompt: "subject", type: "input" }]
+
+    libraryItem.buildElementsFromSchema(mainPage,dataSchema);
+
+    showMenu(
+        [{ desc: `Find Restaurant`, label: `Find`, func: `Search${Name}()` },
+        { desc: "Cancel updates", label: "Cancel", func: "doShowMainMenu()" }]);
+
+}
+
+function createSubjectList(heading, items, sub){
+    openPage(heading);
+
+    for(item of items) {
+        if(item.subject == sub){
+            let itemPar = createListElement(item);
+            mainPage.appendChild(itemPar);
+        }
+    }
+}
+
 
 function Searchsubject() {  
 
     var searchRefElement = document.getElementById("subject");
-    var searchsub = searchRefElement.value;
-    
-    var pos = findStartsWithDataPos(searchsub, 0,"subject");
-    
-    if (isNaN(pos)) {
-        alert("Item " + searchsub + " not found");
-    } else {
-        displayData(pos);
-    }
-    }
+    var searchsub = searchRefElement.value;  
+
+    createSubjectList("Search by subject", dataStore, searchsub);
+
+    showMenu([{ desc: "Cancel", label: "Cancel", func: "doShowMainMenu()" }]);
+
+}
+
+
 
 //contributor 검색
 
 function doSearchContributor(){
-    finditem("contributor ");
+    findContributor("contributor ");
 }
+
+function findContributor(Name) {
+
+    openPage(`Search by ${Name} `);
+
+    dataSchema = [{ id: "contributor", prompt: "contributor", type: "input" }]
+
+    libraryItem.buildElementsFromSchema(mainPage,dataSchema);
+
+    showMenu(
+        [{ desc: `Find Restaurant`, label: `Find`, func: `Search${Name}()` },
+        { desc: "Cancel updates", label: "Cancel", func: "doShowMainMenu()" }]);
+
+}
+
+function createContList(heading, items, sub){
+    openPage(heading);
+
+    for(item of items) {
+        var text = item.contributor;
+        for(tex of text){
+            if(tex.name.name == sub){
+                let itemPar = createListElement(item);
+                mainPage.appendChild(itemPar);
+            }
+        }   
+    }
+}
+
 
 function Searchcontributor() {  
 
     var searchRefElement = document.getElementById("contributor");
-    var searchsub = searchRefElement.value;
+    var searchsub = searchRefElement.value;  
+
+    createContList("Search by contributor", dataStore, searchsub);
+
+    showMenu([{ desc: "Cancel", label: "Cancel", func: "doShowMainMenu()" }]);
     
-    var pos = findStartsWithDataPos(searchsub, 0,"contributor");
-    
-    if (isNaN(pos)) {
-        alert("Item " + searchsub + " not found");
-    } else {
-        displayData(pos);
-    }
 }
 
 function finditem(Name) {
@@ -377,20 +503,18 @@ function findStartsWithDataPos(name, startPos, type){
 
         if (type =="contributor") {
             var data = dataStore[pos].contributor;
-            console.log(data);
                 for(cotb of data){
                     var lowerCaseStoredName =cotb.name.name.toLowerCase();
                     if (lowerCaseStoredName.startsWith(name)) {
                         return pos;
                     }
-                        
+                }       
                     // move down the data
                     pos = pos + 1;
 
                     // if we have reached the end of the data - wrap round
                     if (pos == dataStore.length) {
                     pos = 0;
-                    }
                 }
         }
         // stop when we get back to where we started
@@ -463,7 +587,7 @@ function doModifyitem(){
 }
 
 function domodify(Name) {
-    openPage(`${Name} Restaurant`);
+    openPage(`${Name}`);
 
     dataSchema = [{ id: "name", prompt: "Name", type: "input" }]
 
@@ -484,24 +608,26 @@ function Modifyitem() {
     if(isNaN(pos)){
         alert("Restaurant " + searchRef + " not found");
     } else {
-        doUpdateItem(pos+1);
+        doUpdateItem(searchRef);
     }
 
 }
 
-function dofinditem(Ref) {
+function dofinditem(name) {
 
     for (let item of dataStore) {
-        if (item.itemRef == Ref) {
+        if (item.title == name) {
             return item;
         }
     }
     return null;
 }
 
-function doUpdateItem(Ref) {
+function doUpdateItem(name) {
 
-    var rstrnt = dofinditem(Ref);
+    var rstrnt = dofinditem(name);
+    var itemName = rstrnt.title;
+    var pos = findStartsWithDataPos(itemName, 0, "title");
 
     if (rstrnt == null) {
         return false;
@@ -509,9 +635,9 @@ function doUpdateItem(Ref) {
 
     activeItem = rstrnt;
 
-    openPage("Update "  + Ref);
+    openPage("Update "  + name);
 
-    if(rstrnt.type == "book"){
+    if(rstrnt.type == "Author"){
 
         dataSchema = [{ id: "title", prompt: "title", type: "input" },
         { id: "subject", prompt: "subject", type: "input" },
@@ -520,9 +646,8 @@ function doUpdateItem(Ref) {
         { id: "DDSnumber", prompt: "DDSnumber", type: "input" }]
 
         Book.buildElementsFromSchema(mainPage, dataSchema);
-
-        displayData(Ref-1);
-    } if (rstrnt.type == "CD"){
+        displayData(pos);
+    } if (rstrnt.type == "Artist"){
 
         dataSchema = [{ id: "title", prompt: "title", type: "input" },
         { id: "subject", prompt: "subject", type: "input" },
@@ -531,8 +656,8 @@ function doUpdateItem(Ref) {
 
         Book.buildElementsFromSchema(mainPage, dataSchema);
 
-        displayData(Ref-1);
-    } if(rstrnt.type == "DVD"){
+        displayData(pos);
+    } if(rstrnt.type == "Director or Actor"){
 
         dataSchema = [{ id: "title", prompt: "title", type: "input" },
         { id: "subject", prompt: "subject", type: "input" },
@@ -541,9 +666,9 @@ function doUpdateItem(Ref) {
 
         Book.buildElementsFromSchema(mainPage, dataSchema);
 
-        displayData(Ref-1);
+        displayData(pos);
 
-    } if(rstrnt.type == "Magazine"){
+    } if(rstrnt.type == "Editor"){
 
         dataSchema = [{ id: "title", prompt: "title", type: "input" },
         { id: "subject", prompt: "subject", type: "input" },
@@ -553,7 +678,7 @@ function doUpdateItem(Ref) {
 
         Book.buildElementsFromSchema(mainPage, dataSchema);
 
-        displayData(Ref-1);
+        displayData(pos);
     }
 
     showMenu(
@@ -565,7 +690,7 @@ function doUpdateItem(Ref) {
 
 function doSaveUpdate() { // 수정하고 나서 부르면 되겠다
     activeItem.loadFromHTML();
-    alert(activeItem.name +" is updated");
+    alert(activeItem.title +" is updated");
     saveDataStore();
     doShowMainMenu();
 }

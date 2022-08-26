@@ -96,14 +96,6 @@ class libraryItem {
         return result;
     }
 
-    static Contri(cont) {
-        var rawObject = JSON.parse(cont);
-        var result = null;
-        result = new ContributorWithType();
-        Object.assign(result, rawObject);
-        return result;
-    }
-
     constructor(itemRef, title, subject, contributor) {
         this.itemRef = itemRef;
         this.title = title;
@@ -112,10 +104,19 @@ class libraryItem {
     }
 
     getDescription() {
-        var result = "Ref:" + this.itemRef +
+        var text = this.contributor;
+        var conlist = [];
+
+        for(let cot of text){
+            var ctrb = cot.name.name;
+            conlist.push(ctrb);
+        }
+
+        var result = this.itemRef + ". "+
             " Title:" + this.title +
             " Subject:" + this.subject +
-            " Contributor:" + this.contributor;
+            " Contributor:" + conlist;
+
         return result;
     }
 
@@ -152,29 +153,27 @@ class libraryItem {
         let contList = [];
 
         for (let item in this) {
-            if ( item == "itemRef" || item=="type") {
+            if ( item == "itemRef"|| item == "type") {
                 // don't load the type or stockref from the HTML
                 continue;
-            } if (item =="contributor"){
-
+            }
+            if (item =="contributor"){
                 let itemElement = document.getElementById(item);
 
                 var contArr = itemElement.value.split(',');
 
                 for(let i=0; i<contArr.length; i++){
-                    let cotrbt = new ContributorWithType(contArr[i],"type");
+                    var type1 = this.type;
+                    let cotrbt = new ContributorWithType(contArr[i], type1);
                     contList.push(cotrbt);
-
                 }
                 this[item] = contList;
-                console.log(contList);
                 continue;
             }
             // get the element to load from
             let itemElement = document.getElementById(item);
             // set the element to the value in this object
             this[item] = itemElement.value;
-            console.log(itemElement.value);
         }
     }
 
@@ -192,7 +191,7 @@ class libraryItem {
 class Book extends libraryItem{
     constructor(title, subject, contributor, ISBN, DDSnumber){
         super(title, subject, contributor)
-        this.type = "book";
+        this.type = "Author";
         this.ISBN = ISBN;
         this.DDSnumber = DDSnumber;
     }
@@ -201,7 +200,7 @@ class Book extends libraryItem{
 class CD extends libraryItem{
     constructor(title, subject, contributor, UPC){
         super(title, subject, contributor)
-        this.type = "CD";
+        this.type = "Artist";
         this.UPC =UPC;
     }
 }
@@ -209,7 +208,7 @@ class CD extends libraryItem{
 class DVD extends libraryItem{
     constructor(title, subject, contributor, genre){
         super(title, subject, contributor)
-        this.type = "DVD";
+        this.type = "Director or Actor";
         this.genre = genre;
     }
 }
@@ -217,18 +216,26 @@ class DVD extends libraryItem{
 class Magazine extends libraryItem{
     constructor(title, subject, contributor, volume, issue){
         super(title, subject, contributor)
-        this.type = "Magazine";
+        this.type = "Editor";
         this.volume = volume;
         this.issue = issue;
     }
 }
 
-
-
 class ContributorWithType{
     constructor(name, type){
         this.type = type;
         this.name = new Contributor(name);
+    }
+
+    describeContributor(){
+        var list = [];
+        var conts = this.name;
+        for(cont of conts){
+            var ctrb = cont.name.name;
+            list.push(ctrb);
+        }
+        return list;
     }
 }
 

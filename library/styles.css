@@ -1,64 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@1,600&family=Poppins&display=swap');
 
 .mainHeading {
     font-size: 4em;
-    font-family: cursive;
+    font-family: 'Nunito Sans', sans-serif;
+    background-color: aliceblue;
+    text-shadow:3px 3px 6px #8fa2b8;
 }
 
 .mainPage{
-    color: white;
-    background: black;
+    color: rgb(0, 0, 0);
+    background: aliceblue;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
 }
 
 .menuPar{
-    margin:2px;
+    margin:4px;
 }
 
 .menuButtonCaption
 {
     margin:2px;
     display:inline-block;
-    width:10em;
+    width: 13em;
+    text-align: left;
 }
 
 .pageTitle,.menuButtonCaption,.menuButton,.inputText,.inputLabel,.inputTextarea
 {
-    font-size: 2em;
-    font-family:Arial, Helvetica, sans-serif;
-    color: white;
-    background: black;
+    font-size: 20px;
+    font-family: 'Poppins', sans-serif;
+    color: black;
+    background: aliceblue;
 }
+.pageTitle{
+    font-size: 50px;
+    text-shadow:1px 1px 6px #8fa2b8;
+}
+.inputLabel{
+    text-align: left;
+}
+.inputText{
+    width: 340px;
+    height: 32px;
+    font-size: 20px;
+    border: 0;
+    border-radius: 15px;
+    outline: none;
+    padding-left: 10px;
+    background-color: rgb(255, 255, 255);
+}
+
+.inputText:focus {
+     outline: none !important;
+      border-color:#d6a8e9;
+     box-shadow: 0 0 15px #8ac0e4; }
+
 
 .menuButton
 {
-    margin:2px;
-    display:inline-block;
-    width:8em;
+    width: 200px;
+    height: 30px;
+    font-size: 20px;
+    border: 2px;
+    border-radius: 5px;
+    outline: none;
+    padding-left: 10px;
+    background-color: rgb(218, 238, 255);
+
 }
 
+.menuButton:hover{
+    color:rgb(255, 255, 255);
+    /*font-weight: bold;*/
+    background-color: #8ac0e4;
 
+    outline: none !important;
+    border-color:#d6a8e9;
+    box-shadow: 0 0 15px #8ac0e4;
 
+}
+    
+    
 .pageTitle{
     margin:5px;
-    font-size:4em;
+    font-size:3em;
 }
 
 .inputLabel
 {
     display:inline-block;
-    vertical-align: top;
+    vertical-align: left;
     width:6em;
 }
 
 .itemButton
 {
-    color: white;
-    background: black;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    border: 2px;
+    border-radius: 5px;
+    outline: none;
+    padding-left: 10px;
+    background-color: rgb(183, 221, 255);
+}
+
+.itemButton:hover{
+    color:rgb(255, 255, 255);
+    /*font-weight: bold;*/
+    background-color: #8ac0e4;
 }
 
 .itemList
 {
     margin:0;
-    font-size: 1.5em;
-    font-family: 'Courier New', Courier, monospace;
+    font-size: 19px;
+    font-family: 'Poppins', sans-serif;
     display:inline-block;
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255);
+
 }
